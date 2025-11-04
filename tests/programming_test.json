@@ -1,0 +1,25 @@
+{
+  "title": "Тест по программированию",
+  "description": "Основы программирования на Python",
+  "questions": [
+    {
+      "question": "Какой оператор используется для проверки равенства в Python?",
+      "options": ["=", "==", "===", "equals"],
+      "answer": "=="
+    },
+    {
+      "question": "Что выведет print(type([]))?",
+      "options": ["list", "tuple", "array", "dict"],
+      "answer": "list"
+    },
+    {
+      "question": "Как создать список чисел от 0 до 9?",
+      "answer": "list(range(10))"
+    },
+    {
+      "question": "Сколько элементов будет в списке после выполнения: [x**2 for x in range(5)]?",
+      "options": ["4", "5", "6", "7"],
+      "answer": "5"
+    }
+  ]
+}
