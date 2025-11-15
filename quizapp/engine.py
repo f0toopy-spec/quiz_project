@@ -1,12 +1,36 @@
+"""
+Модуль движка тестирования.
+
+Содержит основную логику проведения тестирования, включая
+отображение вопросов, проверку ответов и подсчет результатов.
+"""
 import random
 from typing import Dict, List, Any, Tuple
 from .loader import load_test
 
 
 class QuizEngine:
-    """Движок для проведения тестирования"""
+    """Движок для проведения тестирования.
 
+     Attributes:
+         test_data (Dict[str, Any]): Данные загруженного теста.
+         title (str): Название теста.
+         questions (List[Dict]): Список вопросов теста.
+         current_question (int): Текущий номер вопроса.
+         score (int): Количество правильных ответов.
+         total_questions (int): Общее количество вопросов.
+         user_answers (List[Dict]): История ответов пользователя.
+
+     Example:
+         >>> engine = QuizEngine(test_data)
+         >>> score, total, answers = engine.take_quiz()
+     """
     def __init__(self, test_data: Dict[str, Any]):
+        """Инициализирует движок тестирования.
+
+             Args:
+                 test_data: Данные теста, загруженные из JSON файла.
+             """
         self.test_data = test_data
         self.title = test_data.get('title', 'Без названия')
         self.questions = test_data.get('questions', [])
@@ -16,27 +40,29 @@ class QuizEngine:
         self.user_answers = []
 
     def get_random_questions(self, count: int) -> List[Dict[str, Any]]:
-        """
-        Выбирает случайные вопросы из теста
+        """Выбирает случайные вопросы из теста.
 
-        Args:
-            count: Количество вопросов
+                Args:
+                    count: Количество вопросов для выбора.
 
-        Returns:
-            Список случайных вопросов
-        """
+                Returns:
+                    Список случайных вопросов.
+
+                Note:
+                    Если запрошено больше вопросов чем есть в тесте,
+                    возвращаются все доступные вопросы.
+                """
         if count > len(self.questions):
             count = len(self.questions)
 
         return random.sample(self.questions, count)
 
     def display_question(self, question: Dict[str, Any]) -> None:
-        """
-        Отображает вопрос и варианты ответов
+        """Отображает вопрос и варианты ответов.
 
-        Args:
-            question: Данные вопроса
-        """
+              Args:
+                  question: Данные вопроса для отображения.
+              """
         print(f"\n{question['question']}")
 
         if 'options' in question:
@@ -44,16 +70,19 @@ class QuizEngine:
                 print(f"{i}. {option}")
 
     def check_answer(self, question: Dict[str, Any], user_answer: str) -> bool:
-        """
-        Проверяет ответ пользователя
+        """Проверяет ответ пользователя.
 
-        Args:
-            question: Данные вопроса
-            user_answer: Ответ пользователя
+              Args:
+                  question: Данные вопроса.
+                  user_answer: Ответ, введенный пользователем.
 
-        Returns:
-            True если ответ правильный, иначе False
-        """
+              Returns:
+                  True если ответ правильный, иначе False.
+
+              Note:
+                  Для вопросов с вариантами ответов проверяет номер выбранного варианта.
+                  Для текстовых вопросов сравнивает строки в нижнем регистре.
+              """
         correct_answer = question.get('answer', '').lower().strip()
         user_answer = user_answer.lower().strip()
 
@@ -71,15 +100,20 @@ class QuizEngine:
         return user_answer == correct_answer
 
     def take_quiz(self, questions: List[Dict[str, Any]] = None) -> Tuple[int, int, List[Dict]]:
-        """
-        Проводит тестирование
+        """Проводит тестирование.
 
-        Args:
-            questions: Список вопросов (если None, используются все вопросы)
+            Args:
+                questions: Список вопросов для тестирования. Если None,
+                    используются все вопросы теста.
 
-        Returns:
-            Кортеж (количество правильных ответов, общее количество вопросов, история ответов)
-        """
+            Returns:
+                Кортеж (количество правильных ответов, общее количество вопросов,
+                история ответов).
+
+            Note:
+                История ответов содержит информацию о каждом вопросе, ответе
+                пользователя и правильности ответа.
+            """
         if questions is None:
             questions = self.questions
 
@@ -124,14 +158,31 @@ class QuizEngine:
 
 
 def take_quiz(test_file: str) -> Tuple[int, int, List[Dict]]:
-    """Функция для проведения тестирования"""
+    """Проводит тестирование.
+
+    Args:
+        test_file: Путь к файлу теста.
+
+    Returns:
+        Кортеж (количество правильных ответов, общее количество вопросов,
+        история ответов).
+    """
     test_data = load_test(test_file)
     engine = QuizEngine(test_data)
     return engine.take_quiz()
 
 
 def take_random_quiz(test_file: str, question_count: int = 5) -> Tuple[int, int, List[Dict]]:
-    """Функция для проведения тестирования со случайными вопросами"""
+    """Проводит тестирование со случайными вопросами.
+
+        Args:
+            test_file: Путь к файлу теста.
+            question_count: Количество случайных вопросов.
+
+        Returns:
+            Кортеж (количество правильных ответов, общее количество вопросов,
+            история ответов).
+        """
     test_data = load_test(test_file)
     engine = QuizEngine(test_data)
     random_questions = engine.get_random_questions(question_count)

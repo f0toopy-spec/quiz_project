@@ -1,12 +1,28 @@
+"""
+Модуль обработчиков команд для интерфейса командной строки.
+
+Этот модуль содержит функции, которые вызываются из main.py
+для обработки различных команд пользователя.
+"""
 import os
-import json
+
 from .loader import TestLoader, list_available_tests
 from .engine import take_quiz, take_random_quiz
-from .results import display_results, calculate_statistics
+from .results import display_results
 
 
 def list_tests():
-    """Показывает список доступных тестов"""
+    """Показывает список доступных тестов с их описанием.
+
+       Выводит форматированный список всех найденных тестов с информацией
+       о количестве вопросов и названии теста.
+
+       Example:
+           >>> list_tests()
+           Доступные тесты:
+           1. Математический тест (5 вопросов) - tests/math_test.json
+           2. Тест по программированию (4 вопросов) - tests/programming_test.json
+       """
     tests = list_available_tests()
 
     if not tests:
@@ -26,7 +42,14 @@ def list_tests():
 
 
 def take_test(test_file: str):
-    """Запускает прохождение теста"""
+    """Запускает прохождение указанного теста.
+
+        Args:
+            test_file: Путь к файлу теста.
+
+        Raises:
+            Exception: Если произошла ошибка при прохождении теста.
+        """
     if not os.path.exists(test_file):
         print(f"Файл теста не найден: {test_file}")
         return
@@ -39,7 +62,12 @@ def take_test(test_file: str):
 
 
 def take_random_test(test_file: str, count: int):
-    """Запускает прохождение теста со случайными вопросами"""
+    """Запускает прохождение теста со случайными вопросами.
+
+     Args:
+         test_file: Путь к файлу теста.
+         count: Количество случайных вопросов.
+     """
     if not os.path.exists(test_file):
         print(f"Файл теста не найден: {test_file}")
         return
@@ -52,7 +80,14 @@ def take_random_test(test_file: str, count: int):
 
 
 def create_test():
-    """Создает новый тест через консоль"""
+    """Интерактивное создание нового теста через консоль.
+
+        Запрашивает у пользователя название, описание и вопросы теста,
+        затем сохраняет тест в JSON файл.
+
+        Note:
+            Поддерживает создание вопросов с вариантами ответов и текстовых вопросов.
+        """
     print("Создание нового теста")
     print("=" * 30)
 
@@ -148,7 +183,14 @@ def create_test():
 
 
 def show_statistics(test_file: str):
-    """Показывает статистику теста"""
+    """Показывает статистику указанного теста.
+
+      Args:
+          test_file: Путь к файлу теста.
+
+      Выводит информацию о тесте: название, описание, количество вопросов,
+      распределение по типам вопросов.
+      """
     if not os.path.exists(test_file):
         print(f"Файл теста не найден: {test_file}")
         return

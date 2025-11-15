@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+"""
+Главный модуль системы тестирования.
+
+Этот модуль предоставляет интерфейс командной строки для системы тестирования.
+Использует argparse для обработки аргументов командной строки и делегирует
+выполнение команд модулям пакета quizapp.
+
+Примеры использования:
+    python main.py --list-tests
+    python main.py --take-test tests/math_test.json
+    python main.py --mixed-tests tests/math_test.json tests/programming_test.json
+"""
 import argparse
 import sys
 from quizapp.commands import (
@@ -11,17 +23,30 @@ from quizapp.commands import (
 
 
 def main():
+    """Главная функция, обрабатывающая аргументы командной строки.
+
+      Функция создает парсер аргументов, обрабатывает ввод пользователя
+      и вызывает соответствующие функции из пакета quizapp.
+
+      Raises:
+          SystemExit: Завершает программу с кодом 1 в случае ошибки.
+      """
     parser = argparse.ArgumentParser(
         description='Система тестирования (Quiz)',
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
+Главный модуль системы тестирования.
+
+Этот модуль предоставляет интерфейс командной строки для системы тестирования.
+Использует argparse для обработки аргументов командной строки и делегирует
+выполнение команд модулям пакета quizapp.
+
 Примеры использования:
-  python main.py --list-tests
-  python main.py --take-test tests/math_test.json
-  python main.py --take-random tests/math_test.json --count 5
-  python main.py --create-test
-  python main.py --stats tests/math_test.json
-        '''
+    python main.py --list-tests
+    python main.py --take-test tests/math_test.json
+    python main.py --mixed-tests tests/math_test.json tests/programming_test.json
+"""
+
     )
 
     parser.add_argument('--list-tests', action='store_true',
